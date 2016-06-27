@@ -2,33 +2,107 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="jquery.mobile-1.4.5.min.css">
-<script src="jquery.min.js"></script>
-<script src="jquery.mobile-1.4.5.min.js"></script>
+<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+<link rel="stylesheet" href="css/jquery.mobile.custom.theme.css" />
+  <link rel="stylesheet" href="css/jquery.mobile.custom.theme.min.css" />
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.mobile-1.4.5.min.js"></script>
+<script >
+var db;
+
+$(document).ready(
+function()
+{
+    db=window.openDatabase("RECETARIO","1.0","DESCRIPCION",200000);
+    db.transaction(function(tx){
+        tx.executeSql("CREATE TABLE IF NOT EXISTS RECETA(nombre_receta,procedimiento_receta);")
+        tx.executeSql("CREATE TABLE IF NOT EXISTS INGREDIENTES(nombre_receta,nombre_ingrediente,descripcion);");
+    },errorDB,exitoDB);
+
+}
+);
+
+function errorDB(){
+    window.alert("error bd");
+}
+function exitoDB(){
+   // window.alert("exito bd");
+}
+
+
+
+function buscar_receta()
+{
+    var nombre=document.getElementById("nombre_receta").value;  
+    var sql="select * from receta WHERE nombre_receta='"+ nombre +"'";
+    
+
+        db.transaction(function(tx){
+            tx.executeSql("SELECT * FROM receta;",[],function(tx,rs){
+                for(var i=0;i<rs.rows.length;i++)
+                {
+                    var p=rs.rows.item(i);
+                    document.getElementById("comment").value=p.procedimiento_receta;
+                    
+                }
+            });
+        },errorSelect,exitoDB);        
+    
+}
+
+function errorSelect()
+{
+        window.alert("error Select");
+}
+
+function exito()
+{
+
+}
+
+</script>
 </head>
 <body >
 
 <div data-role="page" >
-  <div data-role="header">
+  <div data-role="panel" id="myPanel" >
+    <h2>Recetas</h2>
+    <p>Receta Guardada</p>
+  </div>
+
+  <div data-role="header" data-theme="b"  >
     <h1>KITFROG</h1>
   </div>
 
-  <div data-role="main" class="ui-content">
-  <div id="principal">
-   <img src="portada.png" onclick="enviar_crear()" style="text-align:center;" >
+  <div data-role="main" class="ui-content" >
+  <div id="principal" style="text-align:center;">
+   <img src="portada.png" onclick="enviar_crear()" id="portada" >
   </div>   
-   <div data-role="collapsible" id="menu">
+   <div data-role="collapsible" id="crear">
 	  <h1>Agregar Receta</h1>
-	  <form>
+	  <form id="menu2">
 	  <label for="text-basic">Nombre Receta:</label>
-        <input type="text" name="text-basic" id="text-basic" value="">
+        <input type="text" name="nombre_receta" id="nombre_receta" value="">
 	  <label for="text-basic">Ingredientes:</label>
-        <input type="text" name="text-basic" id="text-basic" value=""><a href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-icon-plus ui-btn-icon-notext ui-btn-b ui-mini">icon only button</a>
+        <input type="text" name="nombre_ingrediente" id="nombre_ingrediente" value="">
+		<a href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-icon-plus ui-btn-icon-notext ui-btn-b ui-mini" id="btn" 
+		>icon only button</a>
 	  <label for="textarea">Procedimiento:</label>
-        <textarea cols="40" rows="8" name="textarea" id="textarea"></textarea>
+        <textarea cols="40" rows="8" name="comment" id="comment" data-clear-btn="true"></textarea>
+		<input type="submit" data-inline="true" value="Submit" onclick="grabar_receta()">
+		
 	  </form>
 	  <p></p>
 	</div>
+   <div data-role="collapsible" id="listar">
+	  <h1>Ver Recetas Receta</h1>
+	
+    <p>Click on the button below to open the Panel.</p>
+    <a href="#myPanel" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Ver Receta</a>
+
+	  <p></p>
+	</div>
+	
   </div>
 
   <div data-role="footer">
@@ -41,22 +115,55 @@
 </body>
 <script type="text/javascript">
  $("#crear").hide();
- $("#menu").hide();
+ $("#listar").hide();
 function enviar_crear(){
          $("#principal").hide(); 
-		 $("#menu").show();
-
-}
-function ingresar_receta(){
-         $("#menu").hide(); 
 		 $("#crear").show();
+		 $("#listar").show();
+
 }
-function regresar_menu(){
-         $("#crear").hide(); 
-		 $("#menu").show();
+function grabar_receta()
+{
+
+    var nombre=document.getElementById("nombre_receta").value;  
+    var procedimiento=document.getElementById("comment").value;
+    db.transaction
+    (
+        function(tx)
+        {
+           tx.executeSql("INSERT INTO RECETA(nombre_receta,procedimiento_receta)VALUES('" + nombre +"','"+ procedimiento +"');");
+        },errorInsert,exitoInsert);
 }
 
+function errorInsert()
+{
+    window.alert("error insert");
+}
 
+function exitoInsert()
+{
+    window.alert("exito insert");
+}
+$(document).ready(function(){
+var contador=1;
+var cont=contador+1;
+
+    $("#btn").click(function(){
+        $("#menu2").append('<input type="text" name="number" id="ingrediente'+cont+'" value="">');
+		cont++;
+
+});
+});
+
+
+
+
+
+/*function parpadeo() {
+var imagen = document.images["portada"];
+imagen.style.visibility = (imagen.style.visibility == "visible") ? "hidden" : "visible";
+}
+setInterval("parpadeo()", 800);*/
 
 </script>
 </html>
