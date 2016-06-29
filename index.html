@@ -1,89 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link rel="stylesheet" href="mitema5.min.css">
-<link rel="stylesheet" href="jquery.mobile.icons.min.css">
+<link rel="stylesheet" href="themes5/mitema5.min.css">
+<link rel="stylesheet" href="themes5/jquery.mobile.icons.min.css">
 <!--<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">-->
-<link rel="stylesheet" href="jquery.mobile.structure-1.4.5.min.css">
+<link rel="stylesheet" href="css/jquery.mobile.structure-1.4.5.min.css">
 <!--<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">-->
-<script src="jquery.min.js"></script>
-<script src="jquery.mobile-1.4.5.min.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.mobile-1.4.5.min.js"></script>
 
 <script >
-var db;
+
 
 $(document).ready(
 function()
 {
     db=window.openDatabase("RECETARIO","1.0","DESCRIPCION",200000);
-    db.transaction(function(tx){
-        tx.executeSql("CREATE TABLE IF NOT EXISTS RECETA(nombre_receta,procedimiento_receta);")
-        tx.executeSql("CREATE TABLE IF NOT EXISTS INGREDIENTES(nombre_receta,nombre_ingrediente,descripcion);");
-    },errorDB,exitoDB);
-
+	db.transaction(CREATE, errorDB, bienDB);
 }
 );
 
+function CREATE(tx){
+	//ASIGNAR INTEGER TEXT
+   tx.executeSql("CREATE TABLE IF NOT EXISTS RECETA(nombre_receta TEXT,ingredientes TEX,procedimiento_receta TEXT)");
+   //tx.executeSql("CREATE TABLE IF NOT EXISTS INGREDIENTES(nombre_receta TEXT,nombre_ingrediente TEXT,descripcion TEXT);");
+ }
+	
+function bienDB(){
+   // window.alert("CREADA BD");
+	//grabar_receta();
+}
 function errorDB(){
     window.alert("error bd");
 }
-function exitoDB(){
-   // window.alert("exito bd");
-}
-
-
-
-function buscar_receta()
-{
-    var nombre=document.getElementById("nombre_receta").value;  
-    var sql="select * from receta WHERE nombre_receta='"+ nombre +"'";
-    
-
-        db.transaction(function(tx){
-            tx.executeSql("SELECT * FROM receta;",[],function(tx,rs){
-                for(var i=0;i<rs.rows.length;i++)
-                {
-                    var p=rs.rows.item(i);
-                    document.getElementById("comment").value=p.procedimiento_receta;
-                    
-                }
-            });
-        },errorSelect,exitoDB);        
-    
-}
-
-
-
-function errorSelect()
-{
-        window.alert("error Select");
-}
-
-function exito()
-{
-
-}
-
 </script>
+
 </head>
 <body >
 
 <div data-role="page" data-theme="a">
-  <div data-role="panel" id="myPanel" >
+  <div data-role="panel" id="myPanel" data-theme="a" >
     <h2>Recetas</h2>
-    <p>Receta Guardada</p>
+	
+	<h3>Titulo</h3>
+    <p id="Titulo"></p>
+	
+	<h3>Ingredientes</h3>
+	 <div align="left" id="ingredientes"></div>
+	<h3>Procedimiento</h3>	 
+	 <div aling="center" id="procedimiento"></div>
+	
   </div>
 
   <div data-role="header" data-theme="a">
-    <h1>KITFROG</h1>
+   <h1></h1> 
   </div>
 
   <div data-role="main" class="ui-content" id="main" data-theme="a">
-  <div id="principal" style="text-align:center;">
-   <img src="portada.png" onclick="enviar_crear()" id="portada" >
-  </div>   
+        		
+		  <div id="principal" style="text-align:center;" class="div-img" >
+		   <h1>KITFROG</h1>
+		   <img src="img\receta3.jpg" onclick="enviar_crear()" id="portada" class="img" >
+		  </div>   
+
    <div data-role="collapsible" id="crear" data-theme="a">
 	  <h1>Agregar Receta</h1>
 	  <form id="menu2">
@@ -100,30 +85,30 @@ function exito()
 	  </form><input type="submit" data-inline="true" value="Guardar" onclick="grabar_receta()">
 	  <p></p>
 	</div>
-   <div data-role="collapsible" id="listar">
+   <div data-role="collapsible" id="listar" data-theme="a">
 	  <h1>Ver Recetas Receta</h1>
-	
-    <p>Click on the button below to open the Panel.</p>
+  
     <a href="#myPanel" class="ui-btn ui-btn-inline ui-corner-all ui-shadow"
-	onclick="mostrar_resultado()">Ver Receta</a>
+	onclick="queryDB();">Ver Receta</a>
 
 	  <p></p>
 	</div>
 	
   </div>
 
-  <div data-role="footer">
+  <div data-role="footer" data-theme="a">
     <h1>Aplicacion</h1>
   </div>
 </div>
 
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
-<script type="text/javascript">
-	app.initialize();
-</script>
+   <!-- <script type="text/javascript">
+        app.initialize();
+    </script>-->
 </body>
 <script type="text/javascript">
+var db;
  $("#crear").hide();
  $("#listar").hide();
 function enviar_crear(){
@@ -135,13 +120,14 @@ function enviar_crear(){
 function grabar_receta()
 {
 
-    var nombre=document.getElementById("nombre_receta").value;  
-    var procedimiento=document.getElementById("comment").value;
+    var nombre        = document.getElementById("nombre_receta").value;  
+	var ingrediente   = document.getElementById("nombre_ingrediente").value;  
+    var procedimiento = document.getElementById("comment").value;
     db.transaction
     (
         function(tx)
         {
-           tx.executeSql("INSERT INTO RECETA(nombre_receta,procedimiento_receta)VALUES('" + nombre +"','"+ procedimiento +"');"); 
+           tx.executeSql("INSERT INTO RECETA(nombre_receta,ingredientes,procedimiento_receta)VALUES('" + nombre +"','"+ ingrediente +"','"+ procedimiento +"');"); 
         },errorInsert,exitoInsert); 
 		
 }
@@ -166,31 +152,44 @@ function exitoInsert()
 }
 
 
-/*function mostrar_resultado(){
+function queryDB() {
 
- var sql="select * from receta";
- 
-         db.transaction(function(tx){
-            tx.executeSql("SELECT * FROM receta;",[],function(tx,rs){
-                for(var i=0;i<rs.rows.length;i++)
-                {
-                    var p=rs.rows.item(i);
-                    document.getElementById("comment").value=p.procedimiento_receta;
-                    
-                }
-            });
-        },errorSelect,exitoDB);  
- document.getElementById("listar").innerHTML = sql;
-}*/
+
+        db.transaction(function(tx){
+			// AS HOLA    !!!!!!
+            tx.executeSql("SELECT * FROM receta",[],exitoDB);
+        },errorSelect);   
+
+
+}
+
+function exitoDB(tx, results) {
+            var rows = results.rows;
+			for(var i=0;i<rows.length;i++){
+			var nombre_receta =    rows[i].nombre_receta;
+			var ingrediente   =    rows[i].ingredientes;
+			var detalle       =    rows[i].procedimiento_receta;
+			
+			document.getElementById("Titulo").innerHTML = nombre_receta; 
+			document.getElementById("ingredientes").innerHTML = ingrediente;
+			document.getElementById("procedimiento").innerHTML = detalle; 
+			//document.getElementById("myPanel").innerHTML = ingrediente; 
+
+			}
+}
+function errorSelect(error) {
+    alert("Error processing SQL: "+error);
+}
+
 $(document).ready(function(){
-var contador=1;
-var cont=contador+1;
+	var contador=1;
+	var cont=contador+1;
 
-    $("#btn").click(function(){
-        $("#menu2").append('<input type="text" name="number" id="ingrediente'+cont+'" value="">');
-		cont++;
+		$("#btn").click(function(){
+			$("#menu2").append('<input type="text" name="number" id="ingrediente'+cont+'" value="">');
+			cont++;
 
-});
+	});
 });
 
 
