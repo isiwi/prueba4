@@ -28,7 +28,7 @@ function()
 
 function CREATE(tx){
 	//ASIGNAR INTEGER TEXT
-   tx.executeSql("CREATE TABLE IF NOT EXISTS RECETA(nombre_receta,ingredientes,procedimiento_receta)");
+   tx.executeSql("CREATE TABLE IF NOT EXISTS RECETA(nombre_receta TEXT,ingredientes TEX,procedimiento_receta TEXT)");
    //tx.executeSql("CREATE TABLE IF NOT EXISTS INGREDIENTES(nombre_receta TEXT,nombre_ingrediente TEXT,descripcion TEXT);");
  }
 	
