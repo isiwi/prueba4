@@ -166,14 +166,13 @@ function queryDB() {
 function exitoDB(tx, results) {
             var rows = results.rows;
 			for(var i=0;i<rows.length;i++){
-			var nombre_receta =    rows[i].nombre_receta;
-			var ingrediente   =    rows[i].ingredientes;
-			var detalle       =    rows[i].procedimiento_receta;
+			var nombre        =    results.rows.item(i);
+			var ingrediente   =    results.rows.item(i);
+			var detalle       =    results.rows.item(i);
 			
-			document.getElementById("Titulo").innerHTML = nombre_receta; 
-			document.getElementById("ingredientes").innerHTML = ingrediente;
-			document.getElementById("procedimiento").innerHTML = detalle; 
-			//document.getElementById("myPanel").innerHTML = ingrediente; 
+			document.getElementById("Titulo").innerHTML = nombre.nombre_receta; 
+			document.getElementById("ingredientes").innerHTML = ingrediente.ingredientes;
+			document.getElementById("procedimiento").innerHTML = detalle.procedimiento_receta; 
 
 			}
 }
