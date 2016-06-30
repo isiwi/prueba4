@@ -170,9 +170,7 @@ function exitoDB(tx, results) {
 			var ingrediente   =    results.rows.item(i);
 			var detalle       =    results.rows.item(i);
 			
-			document.getElementById("Titulo").innerHTML = nombre.nombre_receta; 
-			document.getElementById("ingredientes").innerHTML = ingrediente.ingredientes;
-			document.getElementById("procedimiento").innerHTML = detalle.procedimiento_receta; 
+$("#recetas").append("<tr><td><h3>"+nombre.nombre_receta+"</h3></td></tr><tr><td><h4>Ingredientes</h4>"+ingrediente.ingredientes+"</td></tr><tr><td><h4>Procedimiento</h4>"+detalle.procedimiento_receta+"</td></tr>");
 
 			}
 }
