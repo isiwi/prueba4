@@ -7,13 +7,13 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link rel="stylesheet" href="mitema8.min.css">
-<link rel="stylesheet" href="jquery.mobile.icons.min.css">
+<link rel="stylesheet" href="theme8/mitema8.min.css">
+<link rel="stylesheet" href="theme8/jquery.mobile.icons.min.css">
 <!--<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">-->
-<link rel="stylesheet" href="jquery.mobile.structure-1.4.5.min.css">
+<link rel="stylesheet" href="css/jquery.mobile.structure-1.4.5.min.css">
 <!--<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">-->
-<script src="jquery.min.js"></script>
-<script src="jquery.mobile-1.4.5.min.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.mobile-1.4.5.min.js"></script>
 
 <script >
 
@@ -80,7 +80,7 @@ function errorDB(){
         
     </div>
     <div role="main" class="ui-content" align="center">
-      
+    <form id="actua" >
      <table id="actualiza">
         <label for="text-basic">Nombre Receta:</label>
         <input type="text" name="text-basic" id="nombre_receta_a" value="">
@@ -94,6 +94,17 @@ function errorDB(){
         
         <!--<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back" data-transition="flow">Delete</a>-->
      </table>
+	</form>
+    </div>
+</div>
+<!-----	Mensaje Exito o Fracaso Actualizar----->
+<div data-role="popup" id="dialogoMensajeActualizar" data-overlay-theme="a" data-theme="a" data-dismissible="false" style="max-width:400px;">
+
+    <div role="main" class="ui-content" align="center">
+        <h3 class="ui-title" id="mensajeActualizar"></h3>
+    
+        <a href="#listar" class="ui-btn ui-corner-all ui-shadow ui-btn-inline" data-rel="back">Aceptar</a>
+        
     </div>
 </div>
 
@@ -119,7 +130,7 @@ function errorDB(){
 				<textarea cols="40" rows="8" name="comment" id="comment" data-clear-btn="true"></textarea>
 		    </form>
 		      <!--<input type="submit" data-inline="true" value="Guardar" onclick="grabar_receta()">-->
-			  <a href="#dialogoMensaje" data-rel="popup" data-position-to="window" data-transition="pop" data-theme="a" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-action ui-btn-icon-left " onclick="grabar_receta()">Guardar Receta</a>
+			  <a href="#dialogoMensaje" data-rel="popup" data-position-to="window" data-transition="pop" data-theme="a" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-action ui-btn-icon-left " onclick="grabar_receta(); modificar_listado();">Guardar Receta</a>
 			  
 
 			  
@@ -127,7 +138,7 @@ function errorDB(){
 	</div>
    <div data-role="collapsible" id="listar" data-theme="a">
 	  <h1>Ver Recetas Receta</h1>
-		<button class="ui-btn ui-btn-inline ui-corner-all" onclick="ver_listado_recetas();">Ver Recetas Guardas</button>		
+		<a href="#" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-icon-refresh ui-btn-icon-left" onclick="ver_listado_recetas();">Ver Recetas Guardas</a>		
 		<form id="listado">
 		 <table id="listado_recetas"></table>
 		</form>
@@ -176,6 +187,8 @@ function errorInsert()
 {  
     var mensaje="Error al Guardar la Receta"
     document.getElementById("mensaje").innerHTML = mensaje; 
+	
+
     //window.alert("error insert");
 }
 
@@ -185,6 +198,7 @@ function exitoInsert()
 	 $('#menu2').each (function(){
 		this.reset();
 	 });
+	 
 	 var mensaje="Receta Ingresada Correctamente"
 	document.getElementById("mensaje").innerHTML = mensaje; 
     //window.alert("Datos Guardados Correctamente");
@@ -192,6 +206,9 @@ function exitoInsert()
 	
 }
 
+function modificar_listado(){
+$("#listar").load();
+}
 
 function ver_listado_recetas() {
 
@@ -228,7 +245,6 @@ function ver_receta(boton) {
 
 var codigo = boton.id;
 
-    /*var nombre=document.getElementById("nombre0").value; */ 
  
     var sql="select * from receta WHERE cod_receta='"+codigo+"'";
         db.transaction(function(tx){
@@ -249,7 +265,7 @@ function exitoSelet(tx, results) {
 			var detalle       =    results.rows.item(i);
             //document.getElementById("nombre_receta_a").innerHTML=nombre.nombre_receta;
 			$("#recetas").append("<tr><td id='0'><h3>"+nombre.nombre_receta+"</h3></td></tr><tr><td><h4>Ingredientes</h4>"+ingrediente.ingredientes+"</td></tr><tr><td><h4>Procedimiento</h4>"+detalle.procedimiento_receta+"</td></tr><tr><td><a href='#dialogoActualizar' data-rel='popup' data-position-to='window' data-transition='pop' data-theme='a' data-role='button' class='ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-edit ui-btn-icon-left'>Editar</a></td></tr>");
-        	$("#actualiza").append("<tr><td><a href='#' data-rel='popup' data-position-to='window' data-transition='pop' data-theme='a' data-role='button' class='ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left' id="+codigo.cod_receta+" onclick='actualizar_receta(this);'>Actualizar</td><td><a href='#' class='ui-btn ui-corner-all ui-shadow ui-btn-inline' data-rel='back'>Cerrar</a></td></tr>")		
+        	$("#actualiza").append("<tr><td><a href='#dialogoMensajeActualizar' data-rel='popup' data-position-to='window' data-transition='pop' data-theme='a' data-role='button' class='ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left' id="+codigo.cod_receta+" onclick='actualizar_receta(this);'>Actualizar</td><td><a href='#' class='ui-btn ui-corner-all ui-shadow ui-btn-inline' data-rel='back'>Cerrar</a></td></tr>")		
 			}
 }
 
@@ -275,17 +291,12 @@ document.getElementById("mensajeEliminar").innerHTML = mensaje;
 		var fila = boton_eliminar_centro.closest("tr");
 		fila.remove();
 
-
-
-//$("#recetas tr").remove();
-//$(this).parent().parent().remove().get();
-//window.location="index.html";
-//window.alert("Borrado Correctamente");
 }
 
 function errorDelete(error){
 
-window.alert("Error processing SQL: "+error);
+var mensaje="Error al Eliminar"
+document.getElementById("mensajeEliminar").innerHTML = mensaje;   
 }
 
 
@@ -305,19 +316,20 @@ var procedimiento_receta = document.getElementById("procedimiento_a").value;
 
 function exitoActualiza(){
 
-/*var mensaje="Receta Eliminada Correctamente"
-document.getElementById("mensajeEliminar").innerHTML = mensaje;   
-$(this).parent().parent().remove().get();
-;*/
-
-window.location="index.html"
-window.alert("Actualizado Correctamente");
+	 $('#actua').each (function(){
+		this.reset();
+	 });
+	 
+	 location.reload();
+var mensaje="Receta Actualizada Correctamente"
+document.getElementById("mensajeActualizar").innerHTML = mensaje;  
 }
 
 
 function errorActualiza(error){
 
-window.alert("Error processing SQL: "+error);
+var mensaje="Error Actualizar"
+document.getElementById("mensajeActualizar").innerHTML = mensaje;  
 }
 </script>
 </html>
