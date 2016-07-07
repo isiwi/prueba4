@@ -7,13 +7,13 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link rel="stylesheet" href="mitema8.min.css">
-<link rel="stylesheet" href="jquery.mobile.icons.min.css">
+<link rel="stylesheet" href="theme8/mitema8.min.css">
+<link rel="stylesheet" href="theme8/jquery.mobile.icons.min.css">
 <!--<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">-->
-<link rel="stylesheet" href="jquery.mobile.structure-1.4.5.min.css">
+<link rel="stylesheet" href="css/jquery.mobile.structure-1.4.5.min.css">
 <!--<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">-->
-<script src="jquery.min.js"></script>
-<script src="jquery.mobile-1.4.5.min.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.mobile-1.4.5.min.js"></script>
 
 <script >
 
@@ -46,7 +46,8 @@ function errorDB(){
 
 <div data-role="page" data-theme="a">
   <div data-role="panel" id="myPanel" data-theme="a" >
-    <h2>Recetas</h2>
+    
+	<img src="img\receta5.jpg" onclick="enviar_crear()" id="portada" class="img" >
 	<form id="tabla">
 	<table id="recetas" ></table>	
 	</form>
@@ -80,6 +81,7 @@ function errorDB(){
         
     </div>
     <div role="main" class="ui-content" align="center">
+     <img src="img\receta6.jpg" class="img" align="center" >
     <form id="actua" >
      <table id="actualiza">
         <label for="text-basic">Nombre Receta:</label>
@@ -116,7 +118,7 @@ function errorDB(){
         		
 		  <div id="principal" style="text-align:center;" class="div-img" >
 		   <h1>KITFROG</h1>
-		   <img src="receta3.jpg" onclick="enviar_crear()" id="portada" class="img" >
+		   <img src="img\receta3.jpg" onclick="enviar_crear()" id="portada" class="img" >
 		  </div>   
 
    <div data-role="collapsible" id="crear" data-theme="a">
@@ -264,7 +266,7 @@ function exitoSelet(tx, results) {
 			var ingrediente   =    results.rows.item(i);
 			var detalle       =    results.rows.item(i);
             //document.getElementById("nombre_receta_a").innerHTML=nombre.nombre_receta;
-			$("#recetas").append("<tr><td id='0'><h3>"+nombre.nombre_receta+"</h3></td></tr><tr><td><h4>Ingredientes</h4>"+ingrediente.ingredientes+"</td></tr><tr><td><h4>Procedimiento</h4>"+detalle.procedimiento_receta+"</td></tr><tr><td><a href='#dialogoActualizar' data-rel='popup' data-position-to='window' data-transition='pop' data-theme='a' data-role='button' class='ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-edit ui-btn-icon-left'>Editar</a></td></tr>");
+			$("#recetas").append("<tr><td id='0'><h3> Nombre</h3>"+nombre.nombre_receta+"</td></tr><tr><td><h4>Ingredientes</h4>"+ingrediente.ingredientes+"</td></tr><tr><td><h4>Procedimiento</h4>"+detalle.procedimiento_receta+"</td></tr><tr><td><a href='#dialogoActualizar' data-rel='popup' data-position-to='window' data-transition='pop' data-theme='a' data-role='button' class='ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-edit ui-btn-icon-left'>Editar</a></td></tr>");
         	$("#actualiza").append("<tr><td><a href='#dialogoMensajeActualizar' data-rel='popup' data-position-to='window' data-transition='pop' data-theme='a' data-role='button' class='ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left' id="+codigo.cod_receta+" onclick='actualizar_receta(this);'>Actualizar</td><td><a href='#' class='ui-btn ui-corner-all ui-shadow ui-btn-inline' data-rel='back'>Cerrar</a></td></tr>")		
 			}
 }
@@ -320,7 +322,7 @@ function exitoActualiza(){
 		this.reset();
 	 });
 	 
-	 location.reload();
+	 location.reload("myPanel");
 var mensaje="Receta Actualizada Correctamente"
 document.getElementById("mensajeActualizar").innerHTML = mensaje;  
 }
